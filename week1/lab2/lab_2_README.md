@@ -1,4 +1,4 @@
-# Lab 2 – Python Functions, Collections, File Handling & Generators
+# Lab 2 – Python Functions
 
 ## Objective
 
