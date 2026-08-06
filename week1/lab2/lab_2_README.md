@@ -128,7 +128,17 @@ to ensure that the test code executes only when the file is run directly and not
 
 
 ---
+## Project Structure
 
+```
+lab2/
+│── alpha.txt
+│── hello.py
+│── numbers.txt
+│── lab_2_README.md
+```
+
+---
 ## Learning Outcomes
 
 After completing this lab, I learned how to:
