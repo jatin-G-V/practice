@@ -6,32 +6,27 @@ from collections import Counter
 
 def word_count(text):
     text = text.lower()
-    for a in text:
-        if a in string.punctuation:
-            text = text.replace(a, "")
+    text = text.translate(str.maketrans("", "", string.punctuation))
 
     words = text.split()
     word_dict = {}
+
     for word in words:
         if word in word_dict:
             word_dict[word] += 1
         else:
             word_dict[word] = 1
-    return word_dict
 
+    return word_dict
+# Here is an example of how to use the word_count function:
 # print("Output of word_count function:")
 # print(word_count("Hello, world! Hello, everyone."))
 
 # Output: {'hello': 2, 'world': 1, 'everyone': 1}
 
 # Problem 2 : Write word_count(text) using a collections.Counter and check if previous implementation and this one are equivalent.
-
 def word_count_counter(text):
-    text = text.lower()
-    for a in text:
-        if a in string.punctuation:
-            text = text.replace(a, "")
-
+    text = text.lower().translate(str.maketrans("", "", string.punctuation))
     words = text.split()
     return dict(Counter(words))
 
@@ -91,10 +86,10 @@ def mean_of_file(path):
 
 def compare_list_and_generator():
     # A list comprehension creates a list in memory.
-    list_comp = [x * x for x in range(5)]
+    list_comp = [x * x for x in range(10)]
 
     # a generator expression creates an iterator that yields items one at a time.
-    gen_exp = (x * x for x in range(5))
+    gen_exp = (x * x for x in range(10))
 
     print("List Comprehension:", list_comp)
     print("Generator Expression:", gen_exp)

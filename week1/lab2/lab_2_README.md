@@ -74,12 +74,15 @@ Example file:
 abs
 54
 78
+72
+56
+fps
 ```
 
 Output:
 
 ```text
-51.2
+54.8
 ```
 
 ---
