@@ -18,7 +18,7 @@ def word_count(text):
         else:
             word_dict[word] = 1
     return word_dict
-
+# Here is an example of how to use the word_count function:
 # print("Output of word_count function:")
 # print(word_count("Hello, world! Hello, everyone."))
 
