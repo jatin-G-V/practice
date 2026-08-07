@@ -6,17 +6,17 @@ from collections import Counter
 
 def word_count(text):
     text = text.lower()
-    for a in text:
-        if a in string.punctuation:
-            text = text.replace(a, "")
+    text = text.translate(str.maketrans("", "", string.punctuation))
 
     words = text.split()
     word_dict = {}
+
     for word in words:
         if word in word_dict:
             word_dict[word] += 1
         else:
             word_dict[word] = 1
+
     return word_dict
 # Here is an example of how to use the word_count function:
 # print("Output of word_count function:")
@@ -25,13 +25,8 @@ def word_count(text):
 # Output: {'hello': 2, 'world': 1, 'everyone': 1}
 
 # Problem 2 : Write word_count(text) using a collections.Counter and check if previous implementation and this one are equivalent.
-
 def word_count_counter(text):
-    text = text.lower()
-    for a in text:
-        if a in string.punctuation:
-            text = text.replace(a, "")
-
+    text = text.lower().translate(str.maketrans("", "", string.punctuation))
     words = text.split()
     return dict(Counter(words))
 
