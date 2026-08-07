@@ -91,10 +91,10 @@ def mean_of_file(path):
 
 def compare_list_and_generator():
     # A list comprehension creates a list in memory.
-    list_comp = [x * x for x in range(5)]
+    list_comp = [x * x for x in range(10)]
 
     # a generator expression creates an iterator that yields items one at a time.
-    gen_exp = (x * x for x in range(5))
+    gen_exp = (x * x for x in range(10))
 
     print("List Comprehension:", list_comp)
     print("Generator Expression:", gen_exp)
