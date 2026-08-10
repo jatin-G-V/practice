@@ -1,5 +1,4 @@
 # Build fluency by writting small, correct functions.
-
 import string
 from collections import Counter
 # Problem 1 : Make a function word_count(text) that returns a dictionary of words to count, lowercase, and stripped of punctuation.
