@@ -4,7 +4,7 @@ from datetime import datetime
 parser = argparse.ArgumentParser()
 
 # Return the number of rows in the CSV file
-def rows(path):
+def number_Of_Rows(path):
     with open(path, 'r') as file:
         count = 0
         for line in file:
@@ -12,23 +12,11 @@ def rows(path):
     return count
 
 # Return the number of columns in the CSV file
-def columns(path):
+def number_Of_Columns(path):
     with open(path, 'r') as file:
         first_line = file.readline()
         return len(first_line.split(','))
 
-# Return the column names and their types in the CSV file
-def table_info(path):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        types = {}
-        i = 0
-        for value in file.readline().strip().split(','):
-            name = column_names[i];
-            types[name] = value_type(value)
-            i += 1
-        return types
 
 # Return the type of a value as a string    
 def value_type(value):
@@ -45,201 +33,156 @@ def value_type(value):
                 return "date"
             except ValueError:
                 return "str"
+            
+# Return the column_header names in the CSV file
+def columns(path):
+    with open(path, 'r') as file:
+        first_line = file.readline()
+        column_names = first_line.strip().split(',')
+        return column_names
+    
+
+# Return the column data of a particular column in the CSV file
+def column_values(path, column_name):
+    column_names = columns(path)
+
+    if column_name not in column_names:
+        return f"Error: Column '{column_name}' not found in the CSV file."
+
+    index = column_names.index(column_name)
+
+    data = []
+
+    with open(path, 'r') as file:
+        file.readline()  
+
+        for line in file:
+            value = line.strip().split(',')[index]
+            if value != "":
+                data.append(value)
+
+    return data
+
+def numeric_column_values(path, column_name):
+    values = column_values(path, column_name)
+
+    if isinstance(values, str):
+        return values
+
+    numeric_values = []
+    for value in values:
+        try:
+            numeric_values.append(float(value))
+        except ValueError:
+            continue
+
+    return numeric_values
 
 # Return the  type of particular column in the CSV file
 def column_type(path,column_name):
+    column_names = columns(path)
+    if column_name not in column_names:
+        return f"Error: Column '{column_name}' not found in the CSV file."
+    index = column_names.index(column_name)
     with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        if column_name not in column_names:
-            return f"Error: Column '{column_name}' not found in the CSV file."
-        index = column_names.index(column_name)
+        file.readline()
         value = file.readline().strip().split(',')[index]
         return value_type(value)
 
-# Return the minimum value of a particular column in the CSV file
-def column_min(path,column_name):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        if column_name not in column_names:
-            return f"Error: Column '{column_name}' not found in the CSV file."
-        index = column_names.index(column_name)
-        min_value = None
-        for line in file:
-            if line.strip().split(',')[index] == '':
-                continue
-            value = float(line.strip().split(',')[index])
+# Return the column names and their types in the CSV file
+def table_info(path):
+    column_names = columns(path)
+    types = {}
+    for column in column_names:
+        types[column] = column_type(path, column)   
+    return types
 
-            if min_value is None or value < min_value:
-                min_value = value
-        return min_value
 
-# Return the maximum value of a particular column in the CSV file
-def column_max(path,column_name):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        if column_name not in column_names:
-            return f"Error: Column '{column_name}' not found in the CSV file."
-        index = column_names.index(column_name)
-        max_value = None
-        for line in file:
-            if line.strip().split(',')[index] == '':
-                continue
-            value = float(line.strip().split(',')[index])
-            if max_value is None or value > max_value:
-                max_value = value
-        return max_value
 
-# Return the mean value of a particular column in the CSV file
-def column_mean(path,column_name):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        if column_name not in column_names:
-            return f"Error: Column '{column_name}' not found in the CSV file."
-        index = column_names.index(column_name)
-        total = 0
-        count = 0
-        for line in file:
-            value = line.strip().split(',')[index]
-            try:
-                total += float(value)
-                count += 1
-            except ValueError:
-                continue
-        if count == 0:
-            return "No valid numbers found."
-        return total / count
+# Return the statistics of a particular numeric column in the CSV file
+def numeric_stats(path, column_name):
+    values = numeric_column_values(path, column_name)
 
-# Return the mean of all numeric columns in the CSV file    
-def numeric_columns_mean(path):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        numeric_columns = []
-        s = file.readline().strip().split(',')
-        for value in s:
-            if value_type(value) in ["int", "float"]:
-                numeric_columns.append(column_names[s.index(value)])
-        means = {}
-        for column in numeric_columns:
-            means[column] = column_mean(path, column)
-        return means
+    if isinstance(values, str):
+        return values
 
-# Return the minimum of all numeric columns in the CSV file
-def numeric_columns_min(path):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        numeric_columns = []
-        s = file.readline().strip().split(',')
-        for value in s:
-            if value_type(value) in ["int", "float"]:
-                numeric_columns.append(column_names[s.index(value)])
-        mins = {}
-        for column in numeric_columns:
-            mins[column] = column_min(path, column)
-        return mins        
+    if not values:
+        return "No valid numbers found."
 
-# Return the maximum of all numeric columns in the CSV file
-def numeric_columns_max(path):
-    with open(path, 'r') as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        numeric_columns = []
-        s = file.readline().strip().split(',')
-        for value in s:
-            if value_type(value) in ["int", "float"]:
-                numeric_columns.append(column_names[s.index(value)])
-        maxes = {}
-        for column in numeric_columns:
-            maxes[column] = column_max(path, column)
-        return maxes  
+    return {
+        "min": min(values),
+        "max": max(values),
+        "mean": sum(values) / len(values)
+    }
+
+# Return the  numeric statistics of all numeric columns in the CSV file
+def numeric_columns_stats(path):
+    column_names = columns(path)
+    numeric_stats_dict = {}
+
+    for column in column_names:
+        if column_type(path, column) in ["int", "float"]:
+            stats = numeric_stats(path, column)
+            numeric_stats_dict[column] = stats
+
+    return numeric_stats_dict
       
 # Return the most frequent values of a particular column in the CSV file
 def most_frequent_values(path, column_name, limit):
-    with open(path, 'r') as file:
-        if limit is None:
-            return "Error: Please provide a value for the --top argument."
-        if limit <= 0:
-            return "Error: Please provide a positive integer for the --top argument."
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        if column_name not in column_names:
-            return f"Error: Column '{column_name}' not found in the CSV file."
-        index = column_names.index(column_name)
-        frequency = {}
-        for line in file:
-            value = line.strip().split(',')[index]
-            if value == '':
-                continue
-            if value in frequency:
-                frequency[value] += 1
-            else:
-                frequency[value] = 1
-        sorted_frequency = sorted(frequency.items(), key=lambda x: x[1], reverse=True)
-        return sorted_frequency[0:limit:1]
+    values = column_values(path, column_name)
+
+    if isinstance(values, str):
+        return values
+
+    frequency = {}
+
+    for value in values:
+        if value in frequency:
+            frequency[value] += 1
+        else:
+            frequency[value] = 1
+
+    sorted_frequency = sorted(frequency.items(), key=lambda x: x[1], reverse=True)
+
+    return dict(sorted_frequency[:limit])
 
 # Return the most frequent values of all columns in the CSV file
 def frequent_values_all_columns(path, limit):
-    with open(path, 'r') as file:
-        if limit is None:
-            return "Error: Please provide a value for the --top argument."
-        if limit <= 0:
-            return "Error: Please provide a positive integer for the --top argument."
-        first_line = file.readline()
-        column_names = first_line.strip().split(',')
-        frequency_all_columns = {}
-        for column_name in column_names:
-            if column_type(path, column_name) in ["int", "float", "date"]:
-                continue
-            frequency_all_columns[column_name] = most_frequent_values(path, column_name, limit)
-        return frequency_all_columns
+    column_names = columns(path)
+    frequent_values_dict = {}
+
+    for column in column_names:
+        frequent_values = most_frequent_values(path, column, limit)
+        frequent_values_dict[column] = frequent_values
+
+    return frequent_values_dict
+
 
     
 # Return the count and percentage of missing values for each column in the CSV file
 def missing_values(path):
-    with open(path, "r") as file:
-        first_line = file.readline()
-        column_names = first_line.strip().split(",")
+    column_names = columns(path)
+    missing_values_dict = {}
+    for column in column_names:
+        missing_count = 0
+        values = column_values(path, column)
 
-        missing = {}
+        if isinstance(values, str):
+            return values
+             
+        total_count = number_Of_Rows(path) - 1
+        missing_count = total_count - len(values)
+        if total_count > 0:
+            missing_percentage = (missing_count / total_count) * 100
+        else:
+            missing_percentage = 0
 
-        # Initialize all columns
-        for column in column_names:
-            missing[column] = 0
+        missing_values_dict[column] = {
+            "missing_count": missing_count,
+            "missing_percentage": missing_percentage
+        }
 
-        total_rows = 0
-
-        for line in file:
-            total_rows += 1
-            values = line.strip().split(",")
-
-            i = 0
-
-            for value in values:
-                if value.strip() == "":
-                    missing[column_names[i]] += 1
-                i += 1
-
-        result = {}
-
-        for column in column_names:
-            count = missing[column]
-
-            if total_rows == 0:
-                percentage = 0
-            else:
-                percentage = (count / total_rows) * 100
-
-            result[column] = {
-                "count": count,
-                "percentage": percentage
-            }
-
-        return result
+    return missing_values_dict
 
 def main():
     parser = argparse.ArgumentParser()
@@ -261,12 +204,10 @@ def main():
                 print("Error: The file is not a CSV file.")
                 exit(1)
             
-            print("Number of rows:", rows(path) ,'\n')
-            print("Number of columns:", columns(path),'\n')
+            print("Number of rows:", number_Of_Rows(path) ,'\n')
+            print("Number of columns:", number_Of_Columns(path),'\n')
             print("Table info:", table_info(path),'\n')
-            print("Numeric columns mean:", numeric_columns_mean(path),'\n')
-            print("Numeric columns min:", numeric_columns_min(path),'\n')
-            print("Numeric columns max:", numeric_columns_max(path),'\n')
+            print("Numeric columns statistics:", numeric_columns_stats(path),'\n')
             print("Most frequent values of all columns:", frequent_values_all_columns(path, limit),'\n')
             print("Missing values:", missing_values(path),'\n')
 
