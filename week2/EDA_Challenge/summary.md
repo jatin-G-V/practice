@@ -21,6 +21,6 @@ Survivors generally paid higher fares than non-survivors. At the extreme end, al
 - **Target leakage:** `Survived` is the target variable and must not be included as a model feature.
 - **Cabin missingness:** Approximately 77% of Cabin values were missing, so the Cabin column was dropped rather than filled with unreliable values.
 
-## Actionable Takeaway
+## Conclusion
 
 Passenger class and sex show the clearest differences in survival in this dataset, while age provides a much weaker separation. Fare also shows a strong association with survival, but this should be interpreted alongside passenger class rather than as an independent causal factor. Before modeling, the Ticket/Fare inconsistency and effects of missing-value treatment should be reviewed, and the target variable must be kept separate from model inputs.
