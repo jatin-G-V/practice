@@ -24,18 +24,16 @@ https://www.kaggle.com/c/titanic/data
 
 The dataset contains passenger information such as age, sex, passenger class, fare, family relationships, ticket information, and survival status.
 
-The raw dataset is stored locally in the `data/` directory and is not committed to the repository.
-
+The dataset is included in the repository under data/train.csv.
 ---
 
 ## Repository Structure
 
 ```text
-week2-eda/
+week2-EDA_Challenge/
 │
 ├── README.md
 ├── requirements.txt
-├── .gitignore
 ├── eda.ipynb
 ├── summary.md
 │
