@@ -24,9 +24,7 @@ https://www.kaggle.com/c/titanic/data
 
 The dataset contains passenger information such as age, sex, passenger class, fare, family relationships, ticket information, and survival status.
 
-
 The dataset is included in the repository under data/train.csv.
-
 ---
 
 ## Repository Structure
