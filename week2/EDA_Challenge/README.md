@@ -37,9 +37,6 @@ week2-eda/
 ├── requirements.txt
 ├── eda.ipynb
 ├── summary.md
-│
-└── data/
-    └── train.csv
 ```
 ## Analysis Workflow
 
