@@ -1,4 +1,4 @@
 pandas==2.3.3
 numpy==2.3.5
 matplotlib==3.10.7
-notebook==6.4.13
+jupyter==1.1.1
