@@ -35,7 +35,6 @@ week2-eda/
 │
 ├── README.md
 ├── requirements.txt
-├── .gitignore
 ├── eda.ipynb
 ├── summary.md
 │
